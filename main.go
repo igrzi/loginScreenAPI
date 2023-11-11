@@ -15,8 +15,7 @@ func main() {
 	r := gin.Default()
 
 	r.POST("/submitUser", controllers.UserCreate)
-	r.GET("/checkUser", controllers.UserCheck)
-	r.GET("/checkUser/:email", controllers.UserCheck2)
+	r.GET("/checkUser/:email", controllers.UserCheck)
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

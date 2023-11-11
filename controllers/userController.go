@@ -55,25 +55,6 @@ func checkIfUserExists(email string) bool {
 }
 
 func UserCheck(c *gin.Context) {
-	var userData struct {
-		Email    string
-		Password string
-	}
-
-	c.Bind(&userData)
-
-	var user models.User
-
-	// Check if the user with the provided email exists
-	result := initializers.DB.Where("email = ?", userData.Email).First(&user)
-
-	// Check for errors and determine if the user exists
-	userExists := errors.Is(result.Error, gorm.ErrRecordNotFound)
-
-	c.JSON(200, userExists)
-}
-
-func UserCheck2(c *gin.Context) {
 	// Get email from the URL
 	email := c.Param("email")
 
@@ -82,10 +63,10 @@ func UserCheck2(c *gin.Context) {
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(404, "User not found in the database")
+			c.Status(404)
 		}
 		return
 	}
 
-	c.JSON(200, true)
+	c.Status(200)
 }
