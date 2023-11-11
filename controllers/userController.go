@@ -40,7 +40,7 @@ func UserCreate(c *gin.Context) {
 
 		c.Status(200)
 	} else {
-		c.JSON(409, "User alredy on database")
+		c.JSON(409, "User already on database")
 	}
 }
 
