@@ -55,11 +55,13 @@ func checkIfUserExists(email string) bool {
 }
 
 func UserCheck(c *gin.Context) {
-	// Get email from the URL
-	email := c.Param("email")
+	// Get email and password from the URL
+	email := c.Query("email")
+	providedHashedPassword := c.Query("password")
 
+	// Query the database
 	var user models.User
-	err := initializers.DB.Where("email = ?", email).First(&user).Error
+	err := initializers.DB.Where("email = ? AND password = ?", email, providedHashedPassword).First(&user).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
