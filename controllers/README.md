@@ -6,6 +6,6 @@
     * If the user isn't on the database, encrypts the password using SHA256 and saves it on the database;
     * If the user is on the database, returns a 409 (Conflict) and a string to indicate that the user is already on the database;
 
-## UserCheck
+### UserCheck
 1. Receives a Email in the URL
 2. Checks if the user is on the database, return 404 if the user isn't found, and returns 200 if the user is found.
