@@ -1,13 +1,12 @@
 package controllers
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/igrzi/loginScreenAPI/initializers"
 	"github.com/igrzi/loginScreenAPI/models"
+	"github.com/igrzi/loginScreenAPI/utils"
 	"gorm.io/gorm"
 )
 
@@ -23,9 +22,7 @@ func UserCreate(c *gin.Context) {
 	if !checkIfUserExists(userData.Email) {
 		// Encrypt password
 
-		encryptedPassword := sha256.New()
-		encryptedPassword.Write([]byte(userData.Password))
-		hashedPassword := hex.EncodeToString(encryptedPassword.Sum(nil))
+		hashedPassword := utils.MakeSHA256(userData.Password)
 
 		// Create a user on the database
 		user := models.User{Email: userData.Email, Password: hashedPassword}
@@ -56,12 +53,14 @@ func checkIfUserExists(email string) bool {
 
 func UserCheck(c *gin.Context) {
 	// Get email and password from the URL
-	email := c.Query("email")
-	providedHashedPassword := c.Query("password")
+	URLemail := c.Query("email")
+	URLpassword := c.Query("password")
+
+	hashedPassword := utils.MakeSHA256(URLpassword)
 
 	// Query the database
 	var user models.User
-	err := initializers.DB.Where("email = ? AND password = ?", email, providedHashedPassword).First(&user).Error
+	err := initializers.DB.Where("email = ? AND password = ?", URLemail, hashedPassword).First(&user).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
