@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => {
                 if (response.status === 200) {
                     // Redirect to another HTML page
-                    window.location.href = "/static/pages/success.html";
+                    window.location.href = "/static/index.html";
                 } else {
                     // Handle other response statuses here
                     return response.json();
